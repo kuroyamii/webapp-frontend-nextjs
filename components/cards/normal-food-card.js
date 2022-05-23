@@ -12,11 +12,22 @@ import useStore from "../../src/providers/store";
 import { useEffect, useState } from "react";
 
 const FoodCard = ({ name, path }) => {
+
+  const getIndex = (name) => {
+    let index = data.findIndex((item) => {
+      return item.name === name;
+    })
+    return index
+  };
+
   const data = useStore((state) => state.orders);
   const addOrder = useStore((state) => state.addOrder);
   const decreaseOrder = useStore((state) => state.decreaseOrder);
   const increaseOrder = useStore((state) => state.increaseOrder);
   const removeOrder = useStore((state) => state.removeOrder);
+  const getAmount = useStore((state) => state.getAmount);
+  const [amount, setAmount] = useState(getAmount(getIndex(name)));
+  
   function handleIncrease(e) {
     if (
       data.findIndex((item) => {
@@ -31,6 +42,8 @@ const FoodCard = ({ name, path }) => {
         })
       );
     }
+    setAmount(amount + 1);
+    console.log(getAmount(getIndex(name)));
   }
 
   function handleDecrease(e) {
@@ -43,11 +56,10 @@ const FoodCard = ({ name, path }) => {
     } else {
       decreaseOrder(index);
     }
+    setAmount(amount + 1);
+    console.log(getAmount(getIndex(name)));
   }
 
-  useEffect(() => {
-    console.log(getAmount(name));
-  }, [data]);
 
   return (
     <Box
@@ -91,11 +103,7 @@ const FoodCard = ({ name, path }) => {
       <Grid mb={"0.5rem"} gridGap={1} display="flex" justifyContent={"center"}>
         <GridItem>
           <Text color={"black"}>
-            {data.findIndex((item) => {
-              return item.name === name;
-            }) === -1
-              ? "0"
-              : getAmount(name)}
+            { amount }
           </Text>
         </GridItem>
         <GridItem>

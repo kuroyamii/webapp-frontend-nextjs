@@ -13,16 +13,7 @@ let store = (set, get) => ({
     })),
   decreaseOrder: (order) => set((state) => (state.orders[order].amount -= 1)),
   increaseOrder: (order) => set((state) => (state.orders[order].amount += 1)),
-  getOrderByName: (name) =>
-    get((state) => {
-      let amount =
-        state.orders[
-          state.orders.findIndex((item) => {
-            return item.name === name;
-          })
-        ].amount;
-      return amount;
-    }),
+  getAmount: (order) => get().orders[order] ? get().orders[order].amount : 0,
 });
 
 store = devtools(store);
