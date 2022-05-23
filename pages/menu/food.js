@@ -2,6 +2,7 @@ import { Box, Container, Grid, GridItem, Image } from "@chakra-ui/react";
 import FoodCard from "../../components/cards/normal-food-card";
 import SecondNavbar from "../../components/navbar/second-navbar";
 import { useEffect, useState } from "react";
+import useStore from "../../src/providers/store";
 
 const FoodPage = () => {
   const [isNavbarStick, setIsNavbarStick] = useState(false);

@@ -3,7 +3,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 const inugamiTheme = extendTheme({
   fonts: {
-    heading: "Schoolbell, cursive",
+    heading: "Montserrat, sans-serif",
     body: "Schoolbell, cursive",
   },
   colors: {
