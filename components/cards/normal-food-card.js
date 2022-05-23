@@ -56,7 +56,7 @@ const FoodCard = ({ name, path }) => {
     } else {
       decreaseOrder(index);
     }
-    setAmount(amount + 1);
+    setAmount(amount - 1);
     console.log(getAmount(getIndex(name)));
   }
 
