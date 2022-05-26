@@ -1,10 +1,15 @@
 import { Box, Container, Grid, GridItem, Image } from "@chakra-ui/react";
-import FoodCard from "../../components/cards/normal-food-card";
+// import FoodCard from "../../components/cards/normal-food-card";
 import SecondNavbar from "../../components/navbar/second-navbar";
 import { useEffect, useState } from "react";
-import useStore from "../../src/providers/store";
+import dynamic from "next/dynamic";
 
-const FoodPage = () => {
+const FoodCard = dynamic(
+  () => import("../../components/cards/normal-food-card"),
+  { ssr: false, loading: () => <p>...</p> }
+);
+
+const Sushi = () => {
   const [isNavbarStick, setIsNavbarStick] = useState(false);
 
   useEffect(() => {
@@ -89,4 +94,4 @@ const FoodPage = () => {
   );
 };
 
-export default FoodPage;
+export default Sushi;

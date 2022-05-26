@@ -5,11 +5,7 @@ const SecondNavbar = () => {
   const buttonData = [
     {
       url: "/menu",
-      content: "Favorites",
-    },
-    {
-      url: "/menu/food",
-      content: "Food",
+      content: "Ramen",
     },
     {
       url: "/menu/beverages",
@@ -20,8 +16,16 @@ const SecondNavbar = () => {
       content: "Dessert",
     },
     {
-      url: "/menu/combo",
-      content: "Combo",
+      url: "/menu/sidedish",
+      content: "Side Dish",
+    },
+    {
+      url: "/menu/sushi",
+      content: "Sushi",
+    },
+    {
+      url: "/menu/search-food",
+      content: "Search Food",
     },
   ];
   return (

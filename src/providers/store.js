@@ -13,7 +13,7 @@ let store = (set, get) => ({
     })),
   decreaseOrder: (order) => set((state) => (state.orders[order].amount -= 1)),
   increaseOrder: (order) => set((state) => (state.orders[order].amount += 1)),
-  getAmount: (order) => get().orders[order] ? get().orders[order].amount : 0,
+  getAmount: (order) => (get().orders[order] ? get().orders[order].amount : 0),
 });
 
 store = devtools(store);

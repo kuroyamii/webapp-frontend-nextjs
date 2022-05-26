@@ -1,9 +1,15 @@
 import { Box, Container, Grid, GridItem, Image } from "@chakra-ui/react";
-import FoodCard from "../../components/cards/normal-food-card";
+// import FoodCard from "../../components/cards/normal-food-card";
 import SecondNavbar from "../../components/navbar/second-navbar";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-const Combo = () => {
+const FoodCard = dynamic(
+  () => import("../../components/cards/normal-food-card"),
+  { ssr: false, loading: () => <p>...</p> }
+);
+
+const SideDish = () => {
   const [isNavbarStick, setIsNavbarStick] = useState(false);
 
   useEffect(() => {
@@ -88,4 +94,4 @@ const Combo = () => {
   );
 };
 
-export default Combo;
+export default SideDish;

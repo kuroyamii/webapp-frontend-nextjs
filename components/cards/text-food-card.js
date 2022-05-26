@@ -12,7 +12,7 @@ import useStore from "../../src/providers/store";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const FoodCard = ({ name, path }) => {
+const TextFoodCard = ({ name, path }) => {
   const getIndex = (name) => {
     let index = data.findIndex((item) => {
       return item.name === name;
@@ -27,10 +27,9 @@ const FoodCard = ({ name, path }) => {
   const getAmount = useStore((state) => state.getAmount);
   const [amount, setAmount] = useState(getAmount(getIndex(name)));
 
-  // useEffect(() => {
-  //   console.log(data[getIndex(name)]);
-  // }, [JSON.stringify(data)]);
-
+  useEffect(() => {
+    setAmount(getAmount(getIndex(name)));
+  }, [data]);
   function handleIncrease(e) {
     if (
       data.findIndex((item) => {
@@ -66,50 +65,23 @@ const FoodCard = ({ name, path }) => {
 
   return (
     <Box
-      rounded="lg"
-      backgroundColor={"white.1"}
-      boxShadow="md"
-      width={"11.5rem"}
+      rounded={"lg"}
+      backgroundColor="white.1"
+      boxShadow="sm"
+      width={"100%"}
       height="auto"
       overflow={"hidden"}
       align="center"
-      _hover={{ boxShadow: "xl" }}
+      _hover={{ boxShadow: "md" }}
+      display="flex"
+      flexDir={"horizontal"}
+      justifyContent="space-between"
+      p="1rem"
     >
-      <Link href={"/"} passHref>
-        <Box>
-          <Image
-            src={path}
-            objectFit="cover"
-            height={"9rem"}
-            width="full"
-            cursor={"pointer"}
-          />
-          <Box
-            bgColor={"white"}
-            h="3rem"
-            display={"flex"}
-            justifyContent="center"
-            alignItems={"center"}
-            overflow="hidden"
-          >
-            <Text
-              my="0.3rem"
-              textColor={"grey.1"}
-              wordBreak="break-word"
-              cursor={"pointer"}
-            >
-              {name}
-            </Text>
-          </Box>
-        </Box>
-      </Link>
-      <Grid
-        mb="0.5rem"
-        display={"flex"}
-        gap="0.5rem"
-        alignItems={"center"}
-        justifyContent="center"
-      >
+      <Text color={"black"} align="left">
+        {name}
+      </Text>
+      <Grid display={"flex"} gap="0.5rem" alignItems={"center"}>
         <GridItem>
           <Text color={"black"}>{amount}</Text>
         </GridItem>
@@ -128,4 +100,4 @@ const FoodCard = ({ name, path }) => {
   );
 };
 
-export default FoodCard;
+export default TextFoodCard;
