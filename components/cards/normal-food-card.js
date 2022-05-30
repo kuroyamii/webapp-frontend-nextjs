@@ -12,7 +12,7 @@ import useStore from "../../src/providers/store";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const FoodCard = ({ name, path }) => {
+const FoodCard = ({ id, name, path, type, description, price, stock }) => {
   const getIndex = (name) => {
     let index = data.findIndex((item) => {
       return item.name === name;
@@ -37,7 +37,7 @@ const FoodCard = ({ name, path }) => {
         return item.name === name;
       }) == -1
     ) {
-      addOrder({ name: name, amount: 1 });
+      addOrder({ id: id, name: name, price: price, amount: 1 });
     } else {
       increaseOrder(
         data.findIndex((item) => {
@@ -75,7 +75,7 @@ const FoodCard = ({ name, path }) => {
       align="center"
       _hover={{ boxShadow: "xl" }}
     >
-      <Link href={"/"} passHref>
+      <Link href={"/food/" + id} passHref>
         <Box>
           <Image
             src={path}

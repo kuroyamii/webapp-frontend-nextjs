@@ -29,7 +29,7 @@ const SecondNavbar = () => {
     },
   ];
   return (
-    <Box bgColor="white.1">
+    <Box bgColor="white.1" zIndex={"100"}>
       <Container
         maxW={"container.xl"}
         display="flex"
