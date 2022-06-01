@@ -55,6 +55,67 @@ const CafeAPI = {
       return e;
     }
   },
+  getTableData: async () => {
+    try {
+      const res = await BaseAPI.get("/seats");
+      return res;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  },
+  getWaiters: async () => {
+    try {
+      const res = await BaseAPI.get("/waiters");
+      return res;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  },
+  getSumPeople: async () => {
+    try {
+      const res = await BaseAPI.get("/sum");
+      return res;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  },
+  placeOrder: async (name, table, foods, waiter, amount) => {
+    try {
+      const data = BaseAPI.post("/order/post", {
+        customerName: name,
+        tableID: table,
+        foodID: foods,
+        waiterID: waiter,
+        amount: amount,
+      });
+      return data;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  },
+  getSum: async () => {
+    try {
+      const data = BaseAPI.get("/sum");
+      return data;
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  },
+  payBill: async (customerID) => {
+    try {
+      const data = BaseAPI.post("/pay", {
+        customerID: customerID,
+      });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  },
 };
 
 export default CafeAPI;

@@ -12,7 +12,7 @@ import useStore from "../../src/providers/store";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const TextFoodCard = ({ name, path }) => {
+const TextFoodCard = ({ name, path, stock }) => {
   const getIndex = (name) => {
     let index = data.findIndex((item) => {
       return item.name === name;
@@ -21,6 +21,7 @@ const TextFoodCard = ({ name, path }) => {
   };
   const data = useStore((state) => state.orders);
   const addOrder = useStore((state) => state.addOrder);
+  const done = useStore((state) => state.done);
   const decreaseOrder = useStore((state) => state.decreaseOrder);
   const increaseOrder = useStore((state) => state.increaseOrder);
   const removeOrder = useStore((state) => state.removeOrder);
@@ -31,21 +32,23 @@ const TextFoodCard = ({ name, path }) => {
     setAmount(getAmount(getIndex(name)));
   }, [data]);
   function handleIncrease(e) {
-    if (
-      data.findIndex((item) => {
-        return item.name === name;
-      }) == -1
-    ) {
-      addOrder({ name: name, amount: 1 });
-    } else {
-      increaseOrder(
+    if (amount < stock) {
+      if (
         data.findIndex((item) => {
           return item.name === name;
-        })
-      );
+        }) == -1
+      ) {
+        addOrder({ name: name, amount: 1 });
+      } else {
+        increaseOrder(
+          data.findIndex((item) => {
+            return item.name === name;
+          })
+        );
+      }
+      setAmount(amount + 1);
+      console.log(getAmount(getIndex(name)));
     }
-    setAmount(amount + 1);
-    console.log(getAmount(getIndex(name)));
   }
 
   function handleDecrease(e) {
@@ -86,12 +89,12 @@ const TextFoodCard = ({ name, path }) => {
           <Text color={"black"}>{amount}</Text>
         </GridItem>
         <GridItem>
-          <Button onClick={handleDecrease} size="sm">
+          <Button onClick={handleDecrease} size="sm" isDisabled={done}>
             -
           </Button>
         </GridItem>
         <GridItem>
-          <Button onClick={handleIncrease} size="sm">
+          <Button onClick={handleIncrease} size="sm" isDisabled={done}>
             +
           </Button>
         </GridItem>

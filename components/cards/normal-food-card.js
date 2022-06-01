@@ -6,6 +6,7 @@ import {
   GridItem,
   Image,
   Text,
+  useEventListenerMap,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import useStore from "../../src/providers/store";
@@ -21,32 +22,45 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
   };
   const data = useStore((state) => state.orders);
   const addOrder = useStore((state) => state.addOrder);
+  const done = useStore((state) => state.done);
   const decreaseOrder = useStore((state) => state.decreaseOrder);
   const increaseOrder = useStore((state) => state.increaseOrder);
   const removeOrder = useStore((state) => state.removeOrder);
   const getAmount = useStore((state) => state.getAmount);
   const [amount, setAmount] = useState(getAmount(getIndex(name)));
+  const [stockStatus, setStockStatus] = useState(true);
+  useEffect(() => {
+    if (stock == 0) {
+      setStockStatus(false);
+    } else if (stock > 0) {
+      setStockStatus(true);
+    } else {
+      setStockStatus(false);
+    }
+  }, [stock]);
 
   // useEffect(() => {
   //   console.log(data[getIndex(name)]);
   // }, [JSON.stringify(data)]);
 
   function handleIncrease(e) {
-    if (
-      data.findIndex((item) => {
-        return item.name === name;
-      }) == -1
-    ) {
-      addOrder({ id: id, name: name, price: price, amount: 1 });
-    } else {
-      increaseOrder(
+    if (amount < stock) {
+      if (
         data.findIndex((item) => {
           return item.name === name;
-        })
-      );
+        }) == -1
+      ) {
+        addOrder({ id: id, name: name, price: price, amount: 1 });
+      } else {
+        increaseOrder(
+          data.findIndex((item) => {
+            return item.name === name;
+          })
+        );
+      }
+      setAmount(amount + 1);
+      console.log(getAmount(getIndex(name)));
     }
-    setAmount(amount + 1);
-    console.log(getAmount(getIndex(name)));
   }
 
   function handleDecrease(e) {
@@ -77,6 +91,9 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
     >
       <Link href={"/food/" + id} passHref>
         <Box>
+          <Box bgColor={"white"} pos={"absolute"} p="0.5rem" rounded="lg">
+            {price / 1000} K
+          </Box>
           <Image
             src={path}
             objectFit="cover"
@@ -114,12 +131,20 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
           <Text color={"black"}>{amount}</Text>
         </GridItem>
         <GridItem>
-          <Button onClick={handleDecrease} size="sm">
+          <Button
+            onClick={handleDecrease}
+            size="sm"
+            isDisabled={done && stockStatus}
+          >
             -
           </Button>
         </GridItem>
         <GridItem>
-          <Button onClick={handleIncrease} size="sm">
+          <Button
+            onClick={handleIncrease}
+            size="sm"
+            isDisabled={done && stockStatus}
+          >
             +
           </Button>
         </GridItem>
