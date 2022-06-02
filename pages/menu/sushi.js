@@ -2,6 +2,7 @@ import { Box, Container, Grid, GridItem, Image } from "@chakra-ui/react";
 // import FoodCard from "../../components/cards/normal-food-card";
 import SecondNavbar from "../../components/navbar/second-navbar";
 import { useEffect, useState } from "react";
+import useStore from "../../src/providers/store";
 import dynamic from "next/dynamic";
 import CafeAPI from "../../components/api/cafe-api";
 
@@ -10,13 +11,14 @@ const FoodCard = dynamic(
   { ssr: false, loading: () => <p>...</p> }
 );
 
-const Beverages = () => {
+const Sushi = () => {
   const [isNavbarStick, setIsNavbarStick] = useState(false);
   const [foodData, setData] = useState();
+
   useEffect(() => {
     (async () => {
       try {
-        const food = CafeAPI.getAllFoods(["Beverages"])
+        const food = CafeAPI.getAllFoods(["Sushi"])
           .then((res) => setData(res.data.data))
           .catch((e) => console.log(e));
 
@@ -37,7 +39,6 @@ const Beverages = () => {
     window.addEventListener("scroll", scrollListener);
     return () => window.removeEventListener("scroll", scrollListener);
   }, []);
-
   return (
     <Box>
       <Image src="/food/sashimi.jpg" h="17rem" w="full" objectFit={"cover"} />
@@ -71,4 +72,4 @@ const Beverages = () => {
   );
 };
 
-export default Beverages;
+export default Sushi;

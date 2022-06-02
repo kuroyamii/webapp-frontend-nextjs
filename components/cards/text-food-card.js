@@ -6,14 +6,13 @@ import {
   GridItem,
   Image,
   Text,
-  useEventListenerMap,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import useStore from "../../src/providers/store";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const FoodCard = ({ id, name, path, type, description, price, stock }) => {
+const TextFoodCard = ({ name, path, stock, price }) => {
   const getIndex = (name) => {
     let index = data.findIndex((item) => {
       return item.name === name;
@@ -28,28 +27,45 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
   const removeOrder = useStore((state) => state.removeOrder);
   const getAmount = useStore((state) => state.getAmount);
   const [amount, setAmount] = useState(getAmount(getIndex(name)));
-  const [stockStatus, setStockStatus] = useState(true);
   const addPrice = useStore((state) => state.addPrice);
   const decreasePrice = useStore((state) => state.decreasePrice);
-  const bill = useStore((state) => state.price);
-  useEffect(() => {
-    if (stock == 0) {
-      setStockStatus(false);
-    } else if (stock > 0) {
-      setStockStatus(true);
-    } else {
-      setStockStatus(false);
-    }
-  }, [stock]);
 
+  useEffect(() => {
+    setAmount(getAmount(getIndex(name)));
+  }, [data]);
+  // function handleIncrease(e) {
+  //   if (amount < stock) {
+  //     if (
+  //       data.findIndex((item) => {
+  //         return item.name === name;
+  //       }) == -1
+  //     ) {
+  //       addOrder({ name: name, amount: 1 });
+  //       addPrice(price);
+  //     } else {
+  //       increaseOrder(
+  //         data.findIndex((item) => {
+  //           return item.name === name;
+  //         })
+  //       );
+  //     }
+  //     if (data[getIndex(name)]) {
+  //       console.log(data[getIndex(name)].price);
+  //       addPrice(data[getIndex(name)].price);
+  //     }
+  //     setAmount(amount + 1);
+  //     console.log(getAmount(getIndex(name)));
+  //   }
+  // }
   function handleIncrease(e) {
+    console.log(amount + " " + stock);
     if (amount < stock) {
       if (
         data.findIndex((item) => {
           return item.name === name;
         }) == -1
       ) {
-        addOrder({ id: id, name: name, price: price, amount: 1, stock: stock });
+        addOrder({ id: id, name: name, price: price, amount: 1 });
         addPrice(price);
       } else {
         increaseOrder(
@@ -62,7 +78,6 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
         console.log(data[getIndex(name)].price);
         addPrice(data[getIndex(name)].price);
       }
-      console.log(bill);
       setAmount(amount + 1);
       console.log(getAmount(getIndex(name)));
     }
@@ -89,76 +104,37 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
       setAmount(amount - 1);
     }
     console.log(getAmount(getIndex(name)));
-    console.log(bill);
   }
 
   return (
     <Box
-      rounded="lg"
-      backgroundColor={"white.1"}
-      boxShadow="md"
-      width={"11.5rem"}
+      rounded={"lg"}
+      backgroundColor="white.1"
+      boxShadow="sm"
+      width={"100%"}
       height="auto"
       overflow={"hidden"}
       align="center"
-      _hover={{ boxShadow: "xl" }}
+      _hover={{ boxShadow: "md" }}
+      display="flex"
+      flexDir={"horizontal"}
+      justifyContent="space-between"
+      p="1rem"
     >
-      <Link href={"/food/" + id} passHref>
-        <Box>
-          <Box bgColor={"white"} pos={"absolute"} p="0.5rem" rounded="lg">
-            {price / 1000} K
-          </Box>
-          <Image
-            src={path}
-            objectFit="cover"
-            height={"9rem"}
-            width="full"
-            cursor={"pointer"}
-          />
-          <Box
-            bgColor={"white"}
-            h="3rem"
-            display={"flex"}
-            justifyContent="center"
-            alignItems={"center"}
-            overflow="hidden"
-          >
-            <Text
-              my="0.3rem"
-              textColor={"grey.1"}
-              wordBreak="break-word"
-              cursor={"pointer"}
-            >
-              {name}
-            </Text>
-          </Box>
-        </Box>
-      </Link>
-      <Grid
-        mb="0.5rem"
-        display={"flex"}
-        gap="0.5rem"
-        alignItems={"center"}
-        justifyContent="center"
-      >
+      <Text color={"black"} align="left">
+        {name}
+      </Text>
+      <Grid display={"flex"} gap="0.5rem" alignItems={"center"}>
         <GridItem>
           <Text color={"black"}>{amount}</Text>
         </GridItem>
         <GridItem>
-          <Button
-            onClick={handleDecrease}
-            size="sm"
-            isDisabled={done && stockStatus}
-          >
+          <Button onClick={handleDecrease} size="sm" isDisabled={done}>
             -
           </Button>
         </GridItem>
         <GridItem>
-          <Button
-            onClick={handleIncrease}
-            size="sm"
-            isDisabled={done && stockStatus}
-          >
+          <Button onClick={handleIncrease} size="sm" isDisabled={done}>
             +
           </Button>
         </GridItem>
@@ -167,4 +143,4 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
   );
 };
 
-export default FoodCard;
+export default TextFoodCard;

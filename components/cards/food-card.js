@@ -13,7 +13,7 @@ import useStore from "../../src/providers/store";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const FoodCard = ({ id, name, path, type, description, price, stock }) => {
+const BasicFoodCard = ({ id, name, path, type, description, price, stock }) => {
   const getIndex = (name) => {
     let index = data.findIndex((item) => {
       return item.name === name;
@@ -29,9 +29,6 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
   const getAmount = useStore((state) => state.getAmount);
   const [amount, setAmount] = useState(getAmount(getIndex(name)));
   const [stockStatus, setStockStatus] = useState(true);
-  const addPrice = useStore((state) => state.addPrice);
-  const decreasePrice = useStore((state) => state.decreasePrice);
-  const bill = useStore((state) => state.price);
   useEffect(() => {
     if (stock == 0) {
       setStockStatus(false);
@@ -42,6 +39,10 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
     }
   }, [stock]);
 
+  // useEffect(() => {
+  //   console.log(data[getIndex(name)]);
+  // }, [JSON.stringify(data)]);
+
   function handleIncrease(e) {
     if (amount < stock) {
       if (
@@ -50,7 +51,6 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
         }) == -1
       ) {
         addOrder({ id: id, name: name, price: price, amount: 1, stock: stock });
-        addPrice(price);
       } else {
         increaseOrder(
           data.findIndex((item) => {
@@ -58,11 +58,6 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
           })
         );
       }
-      if (data[getIndex(name)]) {
-        console.log(data[getIndex(name)].price);
-        addPrice(data[getIndex(name)].price);
-      }
-      console.log(bill);
       setAmount(amount + 1);
       console.log(getAmount(getIndex(name)));
     }
@@ -74,22 +69,13 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
     });
     if (index == -1) {
     } else if (data[index].amount == 1) {
-      if (data[getIndex(name)]) {
-        console.log(data[getIndex(name)].price);
-        decreasePrice(data[getIndex(name)].price);
-      }
       removeOrder(index);
       setAmount(amount - 1);
     } else {
-      if (data[getIndex(name)]) {
-        console.log(data[getIndex(name)].price);
-        decreasePrice(data[getIndex(name)].price);
-      }
       decreaseOrder(index);
       setAmount(amount - 1);
     }
     console.log(getAmount(getIndex(name)));
-    console.log(bill);
   }
 
   return (
@@ -140,31 +126,9 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
         gap="0.5rem"
         alignItems={"center"}
         justifyContent="center"
-      >
-        <GridItem>
-          <Text color={"black"}>{amount}</Text>
-        </GridItem>
-        <GridItem>
-          <Button
-            onClick={handleDecrease}
-            size="sm"
-            isDisabled={done && stockStatus}
-          >
-            -
-          </Button>
-        </GridItem>
-        <GridItem>
-          <Button
-            onClick={handleIncrease}
-            size="sm"
-            isDisabled={done && stockStatus}
-          >
-            +
-          </Button>
-        </GridItem>
-      </Grid>
+      ></Grid>
     </Box>
   );
 };
 
-export default FoodCard;
+export default BasicFoodCard;

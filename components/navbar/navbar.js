@@ -56,7 +56,7 @@ const Navbar = () => {
           _focus={{ boxShadow: "none", outline: "none" }}
           _hover={{ boxShadow: "none", outline: "none" }}
         >
-          <Image w="10rem" h="auto" src="./logo/logo inugami.png" />
+          <Image w="10rem" h="auto" src="/logo/logo inugami.png" />
         </Link>
 
         <Grid templateColumns={"repeat(4, 1fr)"} gap="1">
