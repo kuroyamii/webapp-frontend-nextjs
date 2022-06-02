@@ -22,12 +22,21 @@ const AdminPage = () => {
         .catch((err) => console.log(err));
     })();
   }, [refresh]);
+
+  function onClick(e) {
+    (async () => {
+      const data = CafeAPI.restock()
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    })();
+  }
+
   return (
     <Box>
       <Container maxW={"container.xl"}>
         <Heading>Admin Page</Heading>
         <Text color={"black"}>Restock All Food</Text>
-        <Button>Restock</Button>
+        <Button onClick={onClick}>Restock</Button>
         <Text color={"black"}>Active Customers</Text>
         <Grid>
           {customer &&

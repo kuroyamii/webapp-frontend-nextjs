@@ -275,7 +275,7 @@ const Orders = () => {
                 waiterData={orderDetail.waiterData}
               />
 
-              <Button onClick={handleOnClickDone}>Done</Button>
+              {/* <Button onClick={handleOnClickDone}>Done</Button> */}
             </Box>
           </Box>
         </Container>

@@ -135,6 +135,15 @@ const CafeAPI = {
       return err;
     }
   },
+  restock: async () => {
+    try {
+      const data = BaseAPI.get("/restock");
+      return data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  },
 };
 
 export default CafeAPI;
