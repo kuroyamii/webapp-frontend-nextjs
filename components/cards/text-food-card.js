@@ -12,7 +12,7 @@ import useStore from "../../src/providers/store";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const TextFoodCard = ({ name, path, stock }) => {
+const TextFoodCard = ({ name, path, stock, price }) => {
   const getIndex = (name) => {
     let index = data.findIndex((item) => {
       return item.name === name;
@@ -27,24 +27,56 @@ const TextFoodCard = ({ name, path, stock }) => {
   const removeOrder = useStore((state) => state.removeOrder);
   const getAmount = useStore((state) => state.getAmount);
   const [amount, setAmount] = useState(getAmount(getIndex(name)));
+  const addPrice = useStore((state) => state.addPrice);
+  const decreasePrice = useStore((state) => state.decreasePrice);
 
   useEffect(() => {
     setAmount(getAmount(getIndex(name)));
   }, [data]);
+  // function handleIncrease(e) {
+  //   if (amount < stock) {
+  //     if (
+  //       data.findIndex((item) => {
+  //         return item.name === name;
+  //       }) == -1
+  //     ) {
+  //       addOrder({ name: name, amount: 1 });
+  //       addPrice(price);
+  //     } else {
+  //       increaseOrder(
+  //         data.findIndex((item) => {
+  //           return item.name === name;
+  //         })
+  //       );
+  //     }
+  //     if (data[getIndex(name)]) {
+  //       console.log(data[getIndex(name)].price);
+  //       addPrice(data[getIndex(name)].price);
+  //     }
+  //     setAmount(amount + 1);
+  //     console.log(getAmount(getIndex(name)));
+  //   }
+  // }
   function handleIncrease(e) {
+    console.log(amount + " " + stock);
     if (amount < stock) {
       if (
         data.findIndex((item) => {
           return item.name === name;
         }) == -1
       ) {
-        addOrder({ name: name, amount: 1 });
+        addOrder({ id: id, name: name, price: price, amount: 1 });
+        addPrice(price);
       } else {
         increaseOrder(
           data.findIndex((item) => {
             return item.name === name;
           })
         );
+      }
+      if (data[getIndex(name)]) {
+        console.log(data[getIndex(name)].price);
+        addPrice(data[getIndex(name)].price);
       }
       setAmount(amount + 1);
       console.log(getAmount(getIndex(name)));
@@ -57,9 +89,17 @@ const TextFoodCard = ({ name, path, stock }) => {
     });
     if (index == -1) {
     } else if (data[index].amount == 1) {
+      if (data[getIndex(name)]) {
+        console.log(data[getIndex(name)].price);
+        decreasePrice(data[getIndex(name)].price);
+      }
       removeOrder(index);
       setAmount(amount - 1);
     } else {
+      if (data[getIndex(name)]) {
+        console.log(data[getIndex(name)].price);
+        decreasePrice(data[getIndex(name)].price);
+      }
       decreaseOrder(index);
       setAmount(amount - 1);
     }

@@ -19,6 +19,7 @@ import { useState, useEffect, useRef } from "react";
 import useStore from "../src/providers/store";
 import dynamic from "next/dynamic";
 import CafeAPI from "../components/api/cafe-api";
+import OrderDetails from "../components/cards/order-details-card";
 
 const FoodCard = dynamic(() => import("../components/cards/text-food-card"), {
   ssr: false,
@@ -35,8 +36,28 @@ const Orders = () => {
   const customerID = useStore((state) => state.customerID);
   const addCust = useStore((state) => state.addCustomerID);
   const removeCust = useStore((state) => state.removeCustomerID);
+  const customerName = useStore((state) => state.customerName);
+  const addCustomerName = useStore((state) => state.addCustomerName);
   const [custName, setCustName] = useState("");
   const [done, setDone] = useState(false);
+
+  const [orderDetail, setOrderDetail] = useState({});
+
+  useEffect(() => {
+    if (customerID != 0) {
+      (async () => {
+        const data = await CafeAPI.getOrderDetailByID(customerID)
+          .then((res) => {
+            setOrderDetail(res.data.data);
+            console.log(res.data.data);
+          })
+          .catch((err) => console.log(err));
+      })();
+    }
+  }, [customerID]);
+  useEffect(() => {
+    console.log(orderDetail.orderID);
+  }, [orderDetail]);
 
   const doneStatus = useStore((state) => state.done);
   const setDoneStatus = useStore((state) => state.setDone);
@@ -46,6 +67,7 @@ const Orders = () => {
   const [waiters, setWaiters] = useState([]);
   const [waiterID, setWaiterID] = useState();
   const [alert, setAlert] = useState(false);
+  const totalPrice = useStore((state) => state.price);
 
   useEffect(() => {
     (async () => {
@@ -70,8 +92,9 @@ const Orders = () => {
         .catch((err) => console.log(err));
     })();
   }, [doneStatus]);
-
+  const [prices, setPrices] = useState(0);
   const handleInputChange = (e) => setInput(e.target.value);
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (alert == false) {
@@ -84,11 +107,13 @@ const Orders = () => {
           tableID,
           foods,
           waiterID,
-          amounts
+          amounts,
+          totalPrice
         )
           .then((res) => addCust(res.data.data))
           .catch((err) => console.log(err));
       })();
+      addCustomerName(custName);
       setDone(true);
       setDoneStatus(true);
     }
@@ -115,12 +140,22 @@ const Orders = () => {
     })();
     remove();
     removeCust();
-    setDone(false);
     setDoneStatus(false);
   }
   useEffect(() => {
-    console.log(waiters);
-  }, [waiters]);
+    if (customerID != 0) {
+      (async () => {
+        const data = CafeAPI.getOrderDetailByID(customerID).then((res) => {
+          if (res.data.data.orderID == 0) {
+            remove();
+            removeCust();
+            setDone(false);
+            setDoneStatus(false);
+          }
+        });
+      })();
+    }
+  }, []);
 
   return (
     <Container maxW={"container.xl"}>
@@ -189,20 +224,28 @@ const Orders = () => {
                 </Text>
               </StackItem>
               <StackItem>
-                {data.map(({ name, path, stock }, key) => (
+                {data.map(({ name, path, stock, price }, key) => (
                   <Grid
                     templateColumns={"repeat(1,1fr)"}
                     gap="5rem"
                     my="0.5rem"
                   >
                     <GridItem key={key}>
-                      <FoodCard name={name} path={path} stock={stock} />
+                      <FoodCard
+                        name={name}
+                        path={path}
+                        stock={stock}
+                        price={price}
+                      />
                     </GridItem>
                   </Grid>
                 ))}
               </StackItem>
               <StackItem>
                 <Button type="submit">Place Order</Button>
+              </StackItem>
+              <StackItem>
+                <Text color={"black"}>Total Price: {totalPrice}</Text>
               </StackItem>
               {alert && (
                 <StackItem>
@@ -217,8 +260,23 @@ const Orders = () => {
       )}
       {doneStatus == true && (
         <Container maxW={"xl"}>
-          <Box display={"flex"} justifyContent="center" alignItems={"center"}>
-            <Button onClick={handleOnClickDone}>Done</Button>
+          <Box
+            display={"flex"}
+            justifyContent="center"
+            alignItems={"center"}
+            flexDir="column"
+          >
+            <Box>
+              <OrderDetails
+                customerName={customerName}
+                orderID={orderDetail.orderID}
+                orderDetails={orderDetail.orderDetails}
+                orderedAt={orderDetail.orderedAt}
+                waiterData={orderDetail.waiterData}
+              />
+
+              <Button onClick={handleOnClickDone}>Done</Button>
+            </Box>
           </Box>
         </Container>
       )}

@@ -82,7 +82,7 @@ const CafeAPI = {
       return e;
     }
   },
-  placeOrder: async (name, table, foods, waiter, amount) => {
+  placeOrder: async (name, table, foods, waiter, amount, price) => {
     try {
       const data = BaseAPI.post("/order/post", {
         customerName: name,
@@ -90,6 +90,7 @@ const CafeAPI = {
         foodID: foods,
         waiterID: waiter,
         amount: amount,
+        price: price,
       });
       return data;
     } catch (e) {
@@ -97,20 +98,38 @@ const CafeAPI = {
       return e;
     }
   },
-  getSum: async () => {
+  payBill: async (customerID) => {
     try {
-      const data = BaseAPI.get("/sum");
+      const data = BaseAPI.post("/pay", {
+        customerID: customerID,
+      });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  },
+  getOrderDetailByID: async (customerID) => {
+    try {
+      const data = BaseAPI.get("/order?customerID=" + customerID);
       return data;
     } catch (err) {
       console.log(err);
       return err;
     }
   },
-  payBill: async (customerID) => {
+  getOrderDetails: async () => {
     try {
-      const data = BaseAPI.post("/pay", {
-        customerID: customerID,
-      });
+      const data = BaseAPI.get("/details");
+      return data;
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  },
+  getCustomerData: async (id) => {
+    try {
+      const data = BaseAPI.get("/customer/" + id);
+      return data;
     } catch (err) {
       console.log(err);
       return err;

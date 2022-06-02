@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Container,
   Grid,
   GridItem,
@@ -27,6 +28,7 @@ const FoodDetails = () => {
   // useEffect(() => {
   //   console.log(detailData);
   // }, [detailData]);
+
   return (
     <Box>
       {detailData && (
@@ -34,7 +36,9 @@ const FoodDetails = () => {
           maxW={"container.xl"}
           display="flex"
           alignItems={"center"}
+          justifyContent="center"
           h="90vh"
+          flexDirection={"column"}
         >
           <Box
             rounded={"2xl"}
@@ -83,18 +87,19 @@ const FoodDetails = () => {
                 >
                   Stock: {detailData.stock}
                 </Text>
-                <Text
-                  color={"gray.1"}
-                  fontWeight="bold"
-                  fontSize="1.5rem"
-                  wordBreak={"break-word"}
-                  fontFamily={"Montserrat"}
-                >
-                  Order Amount:{" "}
-                </Text>
               </GridItem>
             </Grid>
           </Box>
+          <Button
+            variant={"solid"}
+            bgColor="red.1"
+            color={"white"}
+            mt="2rem"
+            _hover={{ bgColor: "red.1" }}
+            onClick={router.back}
+          >
+            Back to menu
+          </Button>
         </Container>
       )}
     </Box>
