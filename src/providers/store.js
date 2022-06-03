@@ -7,6 +7,10 @@ let store = (set, get) => ({
   done: false,
   customerName: "",
   price: 0,
+  username: "",
+  password: "",
+  setPassword: () =>
+    set((state) => ({ username: "admin", password: "admin1234" })),
   addPrice: (value) => set((state) => ({ price: state.price + value })),
   decreasePrice: (value) => set((state) => ({ price: state.price - value })),
   removePrice: (value) => set((state) => ({ price: 0 })),

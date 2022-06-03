@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   FormControl,
   FormErrorMessage,
   FormHelperText,
@@ -14,12 +15,15 @@ import {
   Stack,
   StackItem,
   Text,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import useStore from "../src/providers/store";
 import dynamic from "next/dynamic";
 import CafeAPI from "../components/api/cafe-api";
 import OrderDetails from "../components/cards/order-details-card";
+import BasicFoodCard from "../components/cards/food-card";
 
 const FoodCard = dynamic(() => import("../components/cards/text-food-card"), {
   ssr: false,
@@ -40,6 +44,7 @@ const Orders = () => {
   const addCustomerName = useStore((state) => state.addCustomerName);
   const [custName, setCustName] = useState("");
   const [done, setDone] = useState(false);
+  const totalBill = useStore((state) => state.price);
 
   const [orderDetail, setOrderDetail] = useState({});
 
@@ -131,9 +136,6 @@ const Orders = () => {
     let id = parseInt(e.target.value);
     setWaiterID(id);
   }
-  useEffect(() => {
-    console.log(typeof tableID);
-  }, [tableID]);
   function handleOnClickDone(e) {
     (async () => {
       const res = await CafeAPI.payBill(customerID);
@@ -158,9 +160,9 @@ const Orders = () => {
   }, []);
 
   return (
-    <Container maxW={"container.xl"}>
-      <Heading m={"2rem"} fontWeight="black" textAlign="center">
-        My Orders
+    <Container maxW={"container.xl"} minH={"100vh"} bgColor="white">
+      <Heading p={"2rem"} fontWeight="black" textAlign="center">
+        Your Orders
       </Heading>
       {doneStatus == false && (
         <Box bg={"white"} w="100%" p={"2rem"} rounded="2xl">
@@ -259,8 +261,8 @@ const Orders = () => {
         </Box>
       )}
       {doneStatus == true && (
-        <Container maxW={"xl"}>
-          <Box
+        <Box px="3rem">
+          {/* <Box
             display={"flex"}
             justifyContent="center"
             alignItems={"center"}
@@ -275,10 +277,125 @@ const Orders = () => {
                 waiterData={orderDetail.waiterData}
               />
 
-              {/* <Button onClick={handleOnClickDone}>Done</Button> */}
+              <Button onClick={handleOnClickDone}>Done</Button>
             </Box>
-          </Box>
-        </Container>
+          </Box> */}
+          <Divider borderColor={"grey.1"} />
+          <Grid templateColumns={"repeat(3,1fr)"} mt="2rem">
+            <GridItem>
+              <Grid templateColumns={"repeat(1,1fr)"}>
+                <GridItem py="0.5rem">
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="bold"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    Customer Name
+                  </Text>
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="normal"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    {customerName}
+                  </Text>
+                </GridItem>
+                <GridItem py="0.5rem">
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="bold"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    Waiter Name
+                  </Text>
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="normal"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    {orderDetail.waiterData?.name}
+                  </Text>
+                </GridItem>
+                <GridItem py="0.5rem">
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="bold"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    Order ID
+                  </Text>
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="normal"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    {orderDetail.orderID}
+                  </Text>
+                </GridItem>
+                <GridItem py="0.5rem">
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="bold"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    Total Bill
+                  </Text>
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="normal"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    Rp {totalBill}
+                  </Text>
+                </GridItem>
+                <GridItem mt="2rem">
+                  <Text
+                    fontFamily={"Montserrat"}
+                    fontWeight="normal"
+                    fontSize={"1rem"}
+                    color="grey.1"
+                  >
+                    Thank you for ordering at{" "}
+                    <Box as="span" color={"yellow.1"} fontWeight="bold">
+                      Inugami Cafe
+                    </Box>
+                    !
+                    <br />
+                    Hope you're having a great day!
+                  </Text>
+                </GridItem>
+              </Grid>
+            </GridItem>
+            <GridItem colSpan="2" display={"flex"} justifyContent="center">
+              <Divider orientation="vertical" borderColor="grey.1" />
+              <Wrap spacing={"5rem"} pl="1rem">
+                {orderDetail.orderDetails?.map(
+                  ({ detailID, foodData }, key) => (
+                    <WrapItem key={key}>
+                      <BasicFoodCard
+                        id={foodData.foodID}
+                        name={foodData.name}
+                        path={foodData.imagePath}
+                        type={foodData.foodType}
+                        description={foodData.description}
+                        price={foodData.price}
+                        stock={foodData.stock}
+                      />
+                    </WrapItem>
+                  )
+                )}
+              </Wrap>
+            </GridItem>
+          </Grid>
+        </Box>
       )}
     </Container>
   );
