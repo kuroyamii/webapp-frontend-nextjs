@@ -94,6 +94,7 @@ const FoodCard = ({ id, name, path, type, description, price, stock }) => {
 
   return (
     <Box
+      data-aos="fade-up"
       rounded="lg"
       backgroundColor={"white.1"}
       boxShadow="md"

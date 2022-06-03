@@ -14,6 +14,7 @@ import SearchBar from "../../components/search-bar";
 import DropdownMenu from "../../components/dropdown-button";
 import CafeAPI from "../../components/api/cafe-api";
 import FoodCard from "../../components/cards/normal-food-card";
+import useStore from "../../src/providers/store";
 
 const SearchFood = () => {
   const [isNavbarStick, setIsNavbarStick] = useState(false);
@@ -21,6 +22,25 @@ const SearchFood = () => {
   const [searchString, setSearchString] = useState("");
   const [foodType, setFoodType] = useState([]);
   const [foods, setFoods] = useState([]);
+
+  const customerID = useStore((state) => state.customerID);
+  const removeCust = useStore((state) => state.removeCustomerID);
+  const remove = useStore((state) => state.deleteOrder);
+  const setDoneStatus = useStore((state) => state.setDone);
+
+  useEffect(() => {
+    if (customerID != 0) {
+      (async () => {
+        const data = CafeAPI.getOrderDetailByID(customerID).then((res) => {
+          if (res.data.data.orderID == 0) {
+            remove();
+            removeCust();
+            setDoneStatus(false);
+          }
+        });
+      })();
+    }
+  }, []);
 
   const onChangeStringSearch = (e) => {
     setSearchString(e.target.value);
@@ -60,13 +80,14 @@ const SearchFood = () => {
         shadow={isNavbarStick ? "md" : "sm"}
         position="sticky"
         top={"3.5rem"}
+        zIndex="100"
       >
         <SecondNavbar />
       </Box>
       <Container
         backgroundColor={"white"}
         maxW={"container.xl"}
-        h={foods ? "auto" : "60vh"}
+        minH={"100vh"}
         pb="2rem"
       >
         <Box
@@ -88,7 +109,7 @@ const SearchFood = () => {
             </CheckboxGroup>
           </Box>
         </Box>
-        <Grid templateColumns={"repeat(4,1fr)"} gap="5rem" my="2rem">
+        <Grid templateColumns={"repeat(4,1fr)"} gap="5rem" mt="4rem">
           {foods &&
             foods.map(
               ({ foodID, name, imagePath, price, stock, description }, key) => (

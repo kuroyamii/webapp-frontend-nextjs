@@ -15,15 +15,30 @@ const CustomerCard = ({ customerData, orderData, refresh }) => {
   }
 
   return (
-    <Box bgColor={"white"} rounded="xl" p="1rem">
+    <Box bgColor={"white"} rounded="md" p="0.5rem" boxShadow={"md"} mb="0.5rem">
       <Link href={"/customer/" + customerData.customerID} passHref>
         <Grid display={"flex"} justifyContent="space-between">
           <GridItem>
-            <Text color="black">Customer Name: {customerData.name}</Text>
-            <Text color="black">Table: {customerData.tableID}</Text>
+            <Grid templateColumns={"repeat(2,1fr)"}>
+              <GridItem>
+                <Text color="black">Customer Name</Text>
+              </GridItem>
+              <GridItem>: {customerData.name}</GridItem>
+              <GridItem>
+                <Text color="black">Table</Text>
+              </GridItem>
+              <GridItem>: {customerData.tableID}</GridItem>
+            </Grid>
           </GridItem>
           <GridItem>
-            <Button onClick={handleClick}>Pay</Button>
+            <Button
+              onClick={handleClick}
+              bgColor="red.1"
+              color={"white"}
+              fontWeight="normal"
+            >
+              Pay
+            </Button>
           </GridItem>
         </Grid>
       </Link>

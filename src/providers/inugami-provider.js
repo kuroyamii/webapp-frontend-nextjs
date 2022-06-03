@@ -17,6 +17,9 @@ const inugamiTheme = extendTheme({
     red: {
       1: "#8C2D1D",
     },
+    yellow: {
+      1: "#FABA49",
+    },
   },
   components: {
     Heading: {

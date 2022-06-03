@@ -91,9 +91,6 @@ const BasicFoodCard = ({ id, name, path, type, description, price, stock }) => {
     >
       <Link href={"/food/" + id} passHref>
         <Box>
-          <Box bgColor={"white"} pos={"absolute"} p="0.5rem" rounded="lg">
-            {price / 1000} K
-          </Box>
           <Image
             src={path}
             objectFit="cover"
