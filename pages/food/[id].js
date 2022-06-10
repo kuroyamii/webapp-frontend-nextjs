@@ -7,6 +7,7 @@ import {
   Heading,
   Image,
   Text,
+  Divider,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import CafeAPI from "../../components/api/cafe-api";
@@ -30,79 +31,65 @@ const FoodDetails = () => {
   // }, [detailData]);
 
   return (
-    <Box>
+    <Container maxW={"container.xl"} minH="86vh">
       {detailData && (
-        <Container
-          maxW={"container.xl"}
-          display="flex"
-          alignItems={"center"}
-          justifyContent="center"
-          h="90vh"
-          flexDirection={"column"}
-        >
-          <Box
-            rounded={"2xl"}
-            bgColor="white"
-            p={"2rem"}
-            flexDir={"horizontal"}
-            justifyContent="center"
-          >
-            <Heading textAlign={"center"}>{detailData.name}</Heading>
-            <Grid
-              mt="2rem"
-              display={"flex"}
-              alignItems={"center"}
-              templateColumns={"repeat(2,1fr)"}
-              justifyContent="space-between"
-              gap={20}
-            >
+        <Grid templateColumns={"repeat(2,1fr)"} pt="5rem">
+          <GridItem display={"flex"} justifyContent="center">
+            <Box w="30rem" h="25rem" rounded={"xl"} overflow="hidden">
+              <Image
+                src={detailData.imagePath}
+                objectFit="cover"
+                h="25rem"
+                w="full"
+              />
+            </Box>
+          </GridItem>
+          <GridItem>
+            <Grid fontFamily={"Montserrat"} color="grey.1" h="full">
               <GridItem>
-                <Image src={detailData.imagePath} w="20rem" rounded={"3xl"} />
-              </GridItem>
-              <GridItem>
-                <Text
-                  fontFamily={"Montserrat"}
-                  fontWeight="normal"
-                  color={"black"}
-                  fontSize="2rem"
-                  wordBreak={"break-word"}
-                >
+                <Text color={"grey.1"} fontSize="2.25rem" fontWeight="bold">
+                  {detailData.name}
+                </Text>
+                <Divider borderColor={"black"} />
+                <Text pt="2rem" color={"grey.1"}>
                   {detailData.description}
                 </Text>
-                <Text
-                  color={"gray.1"}
-                  fontWeight="bold"
-                  fontSize="1.5rem"
-                  wordBreak={"break-word"}
-                  fontFamily={"Montserrat"}
+              </GridItem>
+              <GridItem>
+                <Grid
+                  templateColumns={"repeat(2,1fr)"}
+                  h="full"
+                  pos={"relative"}
                 >
-                  Price: {detailData.price}
-                </Text>
-                <Text
-                  color={"gray.1"}
-                  fontWeight="bold"
-                  fontSize="1.5rem"
-                  wordBreak={"break-word"}
-                  fontFamily={"Montserrat"}
-                >
-                  Stock: {detailData.stock}
-                </Text>
+                  <GridItem pos={"absolute"} bottom="0" left="0">
+                    <Text fontWeight={"bold"} color="grey.1">
+                      Price: {detailData.price}
+                    </Text>
+                  </GridItem>
+                  <GridItem pos={"absolute"} bottom="0" right="0">
+                    <Text fontWeight={"bold"} color="grey.1">
+                      Stock Left Today: {detailData.stock}
+                    </Text>
+                  </GridItem>
+                </Grid>
               </GridItem>
             </Grid>
-          </Box>
-          <Button
-            variant={"solid"}
-            bgColor="red.1"
-            color={"white"}
-            mt="2rem"
-            _hover={{ bgColor: "red.1" }}
-            onClick={router.back}
-          >
-            Back to menu
-          </Button>
-        </Container>
+          </GridItem>
+        </Grid>
       )}
-    </Box>
+      <Box w="full" display={"flex"} justifyContent="center" pt="5rem">
+        <Button
+          variant={"solid"}
+          bgColor="red.1"
+          color={"white"}
+          mt="2rem"
+          _hover={{ bgColor: "red.1" }}
+          onClick={router.back}
+        >
+          Back to menu
+        </Button>
+      </Box>
+    </Container>
   );
 };
 
